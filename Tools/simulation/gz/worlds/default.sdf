@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sdf version="1.9">
+  <world name="default">
+    <physics type="ode">
+      <max_step_size>0.004</max_step_size>
+      <real_time_factor>1.0</real_time_factor>
+      <real_time_update_rate>250</real_time_update_rate>
+    </physics>
+    <gravity>0 0 -9.8</gravity>
+    <magnetic_field>6e-06 2.3e-05 -4.2e-05</magnetic_field>
+    <atmosphere type="adiabatic" />
+    <scene>
+      <grid>false</grid>
+      <ambient>0.4 0.4 0.4 1</ambient>
+      <background>0.7 0.7 0.7 1</background>
+      <shadows>true</shadows>
+    </scene>
+
+    <!-- Ground Plane (100x100) -->
+    <model name="ground_plane">
+      <static>true</static>
+      <pose>50 50 0 0 0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>100 100</size>
+            </plane>
+          </geometry>
+          <surface><friction><ode /></friction><bounce /><contact /></surface>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>100 100</size>
+            </plane>
+          </geometry>
+          <material>
+            <ambient>0.8 0.8 0.8 1</ambient>
+            <diffuse>0.8 0.8 0.8 1</diffuse>
+            <specular>0.8 0.8 0.8 1</specular>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- Spawn Zone Pad: 3x3 grid at (15,15)-(35,35), 10m spacing -->
+    <!-- Visual marker only — no collision -->
+    <model name="spawn_zone_pad">
+      <static>true</static>
+      <pose>25 25 0.01 0 0 0</pose>
+      <link name="link">
+        <visual name="visual">
+          <geometry><plane><normal>0 0 1</normal><size>22 22</size></plane></geometry>
+          <material>
+            <ambient>0.15 0.55 0.15 0.4</ambient>
+            <diffuse>0.15 0.55 0.15 0.4</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- Visual Boundary Walls (100m x 100m) -->
+    <model name="boundary_north">
+      <static>true</static><pose>50 100 0.5 0 0 0</pose>
+      <link name="link">
+        <visual name="visual"><geometry><box><size>100 0.2 1.0</size></box></geometry>
+        <material><ambient>1 0 0 0.5</ambient><diffuse>1 0 0 0.5</diffuse></material></visual>
+      </link>
+    </model>
+    <model name="boundary_south">
+      <static>true</static><pose>50 0 0.5 0 0 0</pose>
+      <link name="link">
+        <visual name="visual"><geometry><box><size>100 0.2 1.0</size></box></geometry>
+        <material><ambient>1 0 0 0.5</ambient><diffuse>1 0 0 0.5</diffuse></material></visual>
+      </link>
+    </model>
+    <model name="boundary_east">
+      <static>true</static><pose>100 50 0.5 0 0 0</pose>
+      <link name="link">
+        <visual name="visual"><geometry><box><size>0.2 100 1.0</size></box></geometry>
+        <material><ambient>1 0 0 0.5</ambient><diffuse>1 0 0 0.5</diffuse></material></visual>
+      </link>
+    </model>
+    <model name="boundary_west">
+      <static>true</static><pose>0 50 0.5 0 0 0</pose>
+      <link name="link">
+        <visual name="visual"><geometry><box><size>0.2 100 1.0</size></box></geometry>
+        <material><ambient>1 0 0 0.5</ambient><diffuse>1 0 0 0.5</diffuse></material></visual>
+      </link>
+    </model>
+
+    <!--
+      OBSTACLES — all placed OUTSIDE the clear zone (5,5)-(45,45).
+      The spawn grid is (15,15)-(35,35). All obstacles are at x>=55 or y>=55.
+    -->
+    <model name="obstacle_1">
+      <static>true</static>
+      <pose>60 20 6 0 0 0</pose>
+      <link name="obstacle">
+        <collision name="collision">
+          <geometry><cylinder><radius>4</radius><length>12</length></cylinder></geometry>
+        </collision>
+        <visual name="visual">
+          <geometry><cylinder><radius>4</radius><length>12</length></cylinder></geometry>
+          <material>
+            <ambient>0.8 0.12 0.05 1</ambient>
+            <diffuse>0.95 0.18 0.08 1</diffuse>
+            <specular>0.2 0.2 0.2 1</specular>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <model name="obstacle_2">
+      <static>true</static>
+      <pose>80 40 6 0 0 0</pose>
+      <link name="obstacle">
+        <collision name="collision">
+          <geometry><box><size>8 8 12</size></box></geometry>
+        </collision>
+        <visual name="visual">
+          <geometry><box><size>8 8 12</size></box></geometry>
+          <material>
+            <ambient>0.85 0.42 0.04 1</ambient>
+            <diffuse>1 0.55 0.08 1</diffuse>
+            <specular>0.2 0.2 0.2 1</specular>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <model name="obstacle_3">
+      <static>true</static>
+      <pose>75 70 6 0 0 0</pose>
+      <link name="obstacle">
+        <collision name="collision">
+          <geometry><sphere><radius>5</radius></sphere></geometry>
+        </collision>
+        <visual name="visual">
+          <geometry><sphere><radius>5</radius></sphere></geometry>
+          <material>
+            <ambient>0.04 0.55 0.75 1</ambient>
+            <diffuse>0.05 0.7 0.95 1</diffuse>
+            <specular>0.2 0.2 0.2 1</specular>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <model name="obstacle_4">
+      <static>true</static>
+      <pose>20 60 6 0 0 0</pose>
+      <link name="obstacle">
+        <collision name="collision">
+          <geometry><box><size>8 8 12</size></box></geometry>
+        </collision>
+        <visual name="visual">
+          <geometry><box><size>8 8 12</size></box></geometry>
+          <material>
+            <ambient>0.25 0.65 0.1 1</ambient>
+            <diffuse>0.35 0.85 0.12 1</diffuse>
+            <specular>0.2 0.2 0.2 1</specular>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <model name="obstacle_5">
+      <static>true</static>
+      <pose>50 55 6 0 0 0</pose>
+      <link name="obstacle">
+        <collision name="collision">
+          <geometry><cylinder><radius>4</radius><length>12</length></cylinder></geometry>
+        </collision>
+        <visual name="visual">
+          <geometry><cylinder><radius>4</radius><length>12</length></cylinder></geometry>
+          <material>
+            <ambient>0.6 0.1 0.65 1</ambient>
+            <diffuse>0.75 0.15 0.85 1</diffuse>
+            <specular>0.2 0.2 0.2 1</specular>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!--
+      POI MARKERS
+      All POIs are at x>=55 OR y>=55 — at least 20m from the furthest spawn drone.
+      Spawn grid furthest corner: (35,35). Nearest POI: (55,20) → distance=~28m. Safe.
+      Red   = priority 3 (high)
+      Orange= priority 2 (medium)
+      Yellow= priority 1 (low)
+    -->
+
+    <!-- POI-1  (55, 20) priority=3 RED — right side, south -->
+    <model name="poi_marker_POI-1">
+      <static>true</static><pose>55 20 0.75 0 0 0</pose>
+      <link name="link">
+        <visual name="pole"><geometry><cylinder><radius>0.15</radius><length>1.5</length></cylinder></geometry><material><ambient>1 0 0 1</ambient><diffuse>1 0 0 1</diffuse></material></visual>
+        <visual name="ball"><pose>0 0 0.9 0 0 0</pose><geometry><sphere><radius>0.5</radius></sphere></geometry><material><ambient>1 0 0 1</ambient><diffuse>1 0 0 1</diffuse></material></visual>
+      </link>
+    </model>
+
+    <!-- POI-2  (70, 20) priority=2 ORANGE -->
+    <model name="poi_marker_POI-2">
+      <static>true</static><pose>70 20 0.75 0 0 0</pose>
+      <link name="link">
+        <visual name="pole"><geometry><cylinder><radius>0.15</radius><length>1.5</length></cylinder></geometry><material><ambient>1 0.55 0 1</ambient><diffuse>1 0.55 0 1</diffuse></material></visual>
+        <visual name="ball"><pose>0 0 0.9 0 0 0</pose><geometry><sphere><radius>0.5</radius></sphere></geometry><material><ambient>1 0.55 0 1</ambient><diffuse>1 0.55 0 1</diffuse></material></visual>
+      </link>
+    </model>
+
+    <!-- POI-3  (85, 20) priority=1 YELLOW -->
+    <model name="poi_marker_POI-3">
+      <static>true</static><pose>85 20 0.75 0 0 0</pose>
+      <link name="link">
+        <visual name="pole"><geometry><cylinder><radius>0.15</radius><length>1.5</length></cylinder></geometry><material><ambient>1 1 0 1</ambient><diffuse>1 1 0 1</diffuse></material></visual>
+        <visual name="ball"><pose>0 0 0.9 0 0 0</pose><geometry><sphere><radius>0.5</radius></sphere></geometry><material><ambient>1 1 0 1</ambient><diffuse>1 1 0 1</diffuse></material></visual>
+      </link>
+    </model>
+    <!-- GCS base marker at (0,0) -->
+    <model name="gcs_marker">
+      <static>true</static><pose>0 0 1.5 0 0 0</pose>
+      <link name="link">
+        <visual name="tower">
+          <geometry><cylinder><radius>0.4</radius><length>3.0</length></cylinder></geometry>
+          <material><ambient>0 0 0 1</ambient><diffuse>0 0 0 1</diffuse></material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- Lighting & Coordinates -->
+    <light name="sunUTC" type="directional">
+      <pose>0 0 500 0 0 0</pose>
+      <cast_shadows>true</cast_shadows>
+      <intensity>1</intensity>
+      <direction>0.001 0.625 -0.78</direction>
+      <diffuse>0.904 0.904 0.904 1</diffuse>
+      <specular>0.271 0.271 0.271 1</specular>
+      <attenuation>
+        <range>2000</range>
+        <linear>0</linear>
+        <constant>1</constant>
+        <quadratic>0</quadratic>
+      </attenuation>
+      <spot>
+        <inner_angle>0</inner_angle>
+        <outer_angle>0</outer_angle>
+        <falloff>0</falloff>
+      </spot>
+    </light>
+    <spherical_coordinates>
+      <surface_model>EARTH_WGS84</surface_model>
+      <world_frame_orientation>ENU</world_frame_orientation>
+      <latitude_deg>47.397971057728974</latitude_deg>
+      <longitude_deg>8.546163739800146</longitude_deg>
+      <elevation>0</elevation>
+    </spherical_coordinates>
+  </world>
+</sdf>
