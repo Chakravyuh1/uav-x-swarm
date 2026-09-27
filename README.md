@@ -64,6 +64,70 @@ This is the reproducibility script for the evaluators.
 
 ---
 
+## 🚀 Getting Started (Clone, Install, Run)
+
+### 1. Clone the repository
+```bash
+git clone https://github.com/Chakravyuh1/uav-x-swarm.git
+cd uav-x-swarm
+```
+
+### 2. Set up your OS environment
+
+| Your OS | What to do |
+|---|---|
+| **Linux (Ubuntu 24.04)** | Already compatible — skip straight to Step 3. |
+| **Windows** | PX4 + Gazebo are **not natively compatible with Windows**. You must install **WSL2** (Windows Subsystem for Linux) with **Ubuntu 24.04** first — see below. |
+
+#### Windows users — install WSL2 + Ubuntu 24.04 first
+```powershell
+wsl --install
+wsl --install -d Ubuntu-24.04
+```
+- Run these in **PowerShell (as Administrator)**
+- Restart if prompted
+- Launch "Ubuntu-24.04" from the Start menu once installed
+- All remaining steps below are run **inside** this Ubuntu-24.04 terminal, not PowerShell
+
+### 3. Install PX4 + Gazebo
+```bash
+cd ~
+git clone https://github.com/PX4/PX4-Autopilot.git --recursive
+bash ./PX4-Autopilot/Tools/setup/ubuntu.sh
+```
+Reboot after this finishes. Test it:
+```bash
+cd ~/PX4-Autopilot
+make px4_sitl gz_x500
+```
+
+### 4. Install ROS 2 (Jazzy)
+```bash
+sudo apt install software-properties-common -y
+sudo add-apt-repository universe
+sudo apt update && sudo apt install curl -y
+sudo curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu $(. /etc/os-release && echo $UBUNTU_CODENAME) main" | sudo tee /etc/apt/sources.list.d/ros2.list > /dev/null
+sudo apt update
+sudo apt install ros-jazzy-desktop ros-dev-tools -y
+echo "source /opt/ros/jazzy/setup.bash" >> ~/.bashrc
+source ~/.bashrc
+```
+
+### 5. Install project dependencies
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+```
+
+### 6. Run the swarm
+```bash
+python3 UAV_X_Individual_Drone_Node_v4_PX4.py --dry-run
+```
+
+> **Note:** ROS 2 Jazzy requires Ubuntu 24.04 specifically — it will not install correctly on other Ubuntu versions (use ROS 2 Humble on Ubuntu 22.04 instead if that's your setup).
+
 ## 🛠️ How to use VS Code to present this to evaluators:
 
 1.  **Use the Outline Panel:** In VS Code, look at the bottom left of your file explorer. There is an "Outline" tab. Click it. It will show you a clean tree of all the classes and functions mentioned above. You can click them to instantly jump to that code.
